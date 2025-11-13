@@ -1,0 +1,49 @@
+import { db } from "../../../f-shared/api/db";
+import type { Folder } from "../../../f-shared/api/interfaces";
+
+export async function createFolder(name: string, parentId: string|null) {
+		const now = Date.now(); const id = crypto.randomUUID();
+		const path = parentId ? await pathFromParent(parentId, name) : `/${name}`;
+		const folder: Folder = { id, name, parentId, path, createdAt: now, updatedAt: now };
+		await db.folders.add(folder);
+		return folder;
+}
+
+async function pathFromParent(parentId: string, name: string) {
+	const parent = await db.folders.get(parentId);
+	if (!parent) throw new Error('Parent not found');
+	return `${parent.path}/${name}`.replace(/\/+/g, '/');
+}
+
+export async function listChildren(parentId: string | null) {
+	window.console.log(parentId);
+	if (parentId == null) {
+		// корневые папки: индекс по parentId не сработает для null
+		return db.folders.filter(f => f.parentId == null).toArray();
+	}
+	// обычный случай — используем индекс
+	return db.folders.where('parentId').equals(parentId).toArray();
+}
+
+export async function getFolderBreadcrumbs(folderId: string) {
+	const chain: Folder[] = [];
+	let current = await db.folders.get(folderId);
+	if (!current) return [];
+
+	while (current) {
+		chain.push(current);
+		if (!current.parentId) break;
+		current = await db.folders.get(current.parentId);
+	}
+
+	return chain.reverse();
+}
+
+export async function updateFolder(id: string, patch: Partial<Folder>) {
+	const s = await db.folders.get(id);if (!s) throw new Error('Not found');
+	const next: Folder = {
+		...s, ...patch,
+		updatedAt: Date.now()
+	};
+	await db.folders.put(next); return next;
+}
