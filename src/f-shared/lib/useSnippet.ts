@@ -20,8 +20,8 @@ export function useFolderContent(folderId: string | null) {
 
       const snippetsPromise =
         folderId == null
-          ? db.snippets.filter(s => s.parentId == null && !s.deletedAt).toArray()
-          : db.snippets.where('parentId').equals(folderId).filter(s => !s.deletedAt).toArray();
+          ? db.snippets.filter(s => s.parentId == null).toArray()
+          : db.snippets.where('parentId').equals(folderId).toArray();
 
       const [folders, snippets] = await Promise.all([foldersPromise, snippetsPromise]);
       return { folders, snippets };

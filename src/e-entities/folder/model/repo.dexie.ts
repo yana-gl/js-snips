@@ -1,8 +1,9 @@
 import { db } from "../../../f-shared/api/db";
 import type { Folder } from "../../../f-shared/api/interfaces";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function createFolder(name: string, parentId: string|null) {
-		const now = Date.now(); const id = crypto.randomUUID();
+		const now = Date.now(); const id = uuidv4();
 		const path = parentId ? await pathFromParent(parentId, name) : `/${name}`;
 		const folder: Folder = { id, name, parentId, path, createdAt: now, updatedAt: now };
 		await db.folders.add(folder);
@@ -47,3 +48,36 @@ export async function updateFolder(id: string, patch: Partial<Folder>) {
 	};
 	await db.folders.put(next); return next;
 }
+
+export const trashFolder = async (rootId: string) => {
+	await db.transaction('rw', db.folders, db.snippets, async () => {
+		const folderIds: string[] = [];
+		const stack: string[] = [rootId];
+
+		// 1. Собираем все id папок в поддереве
+		while (stack.length > 0) {
+			const currentId = stack.pop()!;
+			folderIds.push(currentId);
+
+			const children = await db.folders
+				.where('parentId')
+				.equals(currentId)
+				.toArray();
+
+			for (const child of children) {
+				stack.push(child.id);
+			}
+		}
+
+		// 2. Удаляем все сниппеты из этих папок
+		if (folderIds.length > 0) {
+			await db.snippets
+				.where('parentId')
+				.anyOf(folderIds)
+				.delete();
+		}
+
+		// 3. Удаляем сами папки
+		await db.folders.bulkDelete(folderIds);
+	});
+};

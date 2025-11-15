@@ -21,6 +21,5 @@ export interface Snippet {
 	favorites?: boolean;
 	createdAt: number;
 	updatedAt: number;
-	deletedAt?: number | null;
 	version: number;
 }

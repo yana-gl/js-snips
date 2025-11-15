@@ -1,20 +1,20 @@
-import CodeIcon from '@mui/icons-material/Code';
-import FolderIcon from '@mui/icons-material/Folder';
-import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EditorModal } from '../editorModal/editorModal';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import snippetIcon from '../../f-shared/source/file.png';
+import folderIcon from '../../f-shared/source/folder.png';
+import { CardMenu } from '../menu/menu';
+import { Tooltip } from '@mui/material';
 
 type SnippetCardProps = {
-  type: 'SNIPPET';
-  entity: Snippet;
+	type: 'SNIPPET';
+	entity: Snippet;
 };
 
 type FolderCardProps = {
-  type: 'FOLDER';
-  entity: Folder;
+	type: 'FOLDER';
+	entity: Folder;
 };
 
 type CardProps = SnippetCardProps | FolderCardProps;
@@ -22,67 +22,47 @@ type CardProps = SnippetCardProps | FolderCardProps;
 export const Card = ({ type,  entity }: CardProps) => {
 	const navigate = useNavigate();
 	const [ open, setOpen ] = useState(false);
-	const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-	const menuOpen = Boolean(menuAnchorEl);
+	const iconSrc = type === 'SNIPPET' ? snippetIcon : folderIcon;
+  	const iconAlt = type === 'SNIPPET' ? 'Snippet' : 'Folder';
 
 	const handleOpen = () => type === 'SNIPPET'
 		? setOpen(true)
 		: navigate(`/folder/${entity.id}`);
 
-	const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
-		// чтобы клик по трём точкам не триггерил двойной клик по карточке
-		event.stopPropagation();
-		setMenuAnchorEl(event.currentTarget);
-  	};
+	const [contextPos, setContextPos] = useState<{ mouseX: number; mouseY: number } | null>(null);
 
-	const handleMenuClose = () => {
-		setMenuAnchorEl(null);
-	};
-
-	const handleRename = () => {
-		console.log('rename', entity);
-		handleMenuClose();
-	};
-
-	const handleDelete = () => {
-		console.log('delete', entity);
-		handleMenuClose();
+	const handleContextMenu = (event: MouseEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setContextPos(
+			contextPos === null
+			? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 }
+			: null
+		);
 	};
 
 	return <>
 		<div
-			className="relative flex flex-col items-center gap-2 px-2 py-1 shadow-md rounded-xl cursor-pointer w-[100px] overflow-hidden"
+			className="flex flex-col items-center gap-2 px-2 py-1 cursor-pointer w-[100px] overflow-hidden"
 			onDoubleClick={handleOpen}
+			onContextMenu={handleContextMenu}
 		>
-			{/* Кнопка с тремя точками в правом верхнем углу */}
-			<div className="absolute right-1 top-1">
-				<IconButton
-					size="small"
-					onClick={handleMenuOpen}
-				>
-					<MoreVertIcon fontSize="small"/>
-				</IconButton>
-			</div>
-			
-			{type === 'SNIPPET'
-				? <CodeIcon className="w-[50px] h-[50px]"/>
-				: <FolderIcon className="w-[50px] h-[50px]"/>}
+			<img
+				src={iconSrc}
+				alt={iconAlt}
+				className="w-[50px] h-[50px] object-contain"
+			/>
 			<Tooltip title={entity.name} placement="top">
 				<div className='truncate w-full min-w-0 text-center'>{entity.name}</div>
 			</Tooltip>
 		</div>
 		{/* Меню действий по карточке */}
-		<Menu
-			anchorEl={menuAnchorEl}
-			open={menuOpen}
-			onClose={handleMenuClose}
-			anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-		>
-			<MenuItem onClick={handleOpen}>Открыть</MenuItem>
-			<MenuItem onClick={handleRename}>Переименовать</MenuItem>
-			<MenuItem onClick={handleDelete}>Удалить</MenuItem>
-		</Menu>
+		<CardMenu
+			type={type}
+			entity={entity}
+			contextPos={contextPos}	
+			handleOpen={handleOpen}
+			setContextPos={setContextPos}
+		/>
 		{
 			type === 'SNIPPET' &&
 			<EditorModal

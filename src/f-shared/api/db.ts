@@ -8,7 +8,7 @@ export class DB extends Dexie {
 		super('snips');
 		this.version(1).stores({
 		folders: 'id, parentId, path, updatedAt',
-		snippets: 'id, parentId, searchName, searchTags, updatedAt, deletedAt, favorites'
+		snippets: 'id, parentId, searchName, searchTags, updatedAt, favorites'
 		});
 	}
 }

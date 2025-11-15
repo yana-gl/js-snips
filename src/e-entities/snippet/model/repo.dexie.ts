@@ -1,10 +1,11 @@
 import { db } from "../../../f-shared/api/db";
 import type { Snippet } from "../../../f-shared/api/interfaces";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function createSnippet(p: Partial<Snippet> & { parentId: string | null }) {
 	const now = Date.now();
 	const s: Snippet = {
-		id: crypto.randomUUID(),
+		id: uuidv4(),
 		name: p.name ?? 'Untitled',
 		parentId: p.parentId || null,
 		language: p.language ?? 'plaintext',
@@ -31,12 +32,12 @@ export async function updateSnippet(id: string, patch: Partial<Snippet>) {
 	await db.snippets.put(next); return next;
 }
 
-export const trashSnippet = (id: string) => db.snippets.update(id, { deletedAt: Date.now() });
+export const trashSnippet = (id: string) => db.snippets.delete(id);
 
 export const listSnippetsByFolder = (folderId: string | null) => {
 	window.console.log(folderId);
 	if (folderId == null) {
-		return db.snippets.filter(f => f.parentId == null).filter(s => !s.deletedAt).toArray();
+		return db.snippets.filter(f => f.parentId == null).toArray();
 	}
-	return db.snippets.where('parentId').equals(folderId).filter(s => !s.deletedAt).toArray();
+	return db.snippets.where('parentId').equals(folderId).toArray();
 }
