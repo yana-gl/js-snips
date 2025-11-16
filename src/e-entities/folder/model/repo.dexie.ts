@@ -81,3 +81,6 @@ export const trashFolder = async (rootId: string) => {
 		await db.folders.bulkDelete(folderIds);
 	});
 };
+
+
+export const moveFolder = (id: string, newParentId: string | null) => updateFolder(id, {parentId: newParentId});

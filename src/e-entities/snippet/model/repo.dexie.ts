@@ -34,6 +34,8 @@ export async function updateSnippet(id: string, patch: Partial<Snippet>) {
 
 export const trashSnippet = (id: string) => db.snippets.delete(id);
 
+export const moveSnippet = (id: string, newParentId: string | null) => updateSnippet(id, {parentId: newParentId});
+
 export const listSnippetsByFolder = (folderId: string | null) => {
 	window.console.log(folderId);
 	if (folderId == null) {

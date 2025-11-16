@@ -7,11 +7,13 @@ import { BreadCrumbs } from "../../../d-features/breadCrumbs/breadCrumbs";
 import { useFolderContent } from "../../../f-shared/lib/useSnippet";
 import { FolderList } from "../../../c-widgets/folderList/folderList";
 import Logo from '../../../f-shared/source/logo.svg?react';
+import { useDraggable } from "../../../f-shared/hooks/useDragDrop/useDraggable";
 
 export const HomePage = () => {
 	const { folderId } = useParams();
 	const {snippets, folders} = useFolderContent(folderId || null);
 	const [ crumbs, setCrumbs ] = useState<Folder[]>([]);
+	const { dragElementRef, handleDragStart } = useDraggable();
 
 	useEffect(() => {
 		if (folderId) {
@@ -30,9 +32,18 @@ export const HomePage = () => {
 			</header>
 			<div className="bg-grid-notebook h-screen flex flex-col p-[30px] gap-[30px] bg-[#F5F5F5]">
 				<BreadCrumbs items={crumbs}/>
-				<FolderList folders={folders} folderId={folderId || null}/>
-				<SnippetList snippets={snippets} folderId={folderId || null}/>
+				<FolderList folders={folders} folderId={folderId || null} onDragStart={handleDragStart}/>
+				<SnippetList snippets={snippets} folderId={folderId || null} onDragStart={handleDragStart}/>
 			</div>
+			<div
+                ref={dragElementRef}
+				className="shadow-lg bg-white z-1 p-[10px] border-[1px] border-[#BFD3D2] rounded-[5px]"
+                style={{
+                    position: 'absolute',
+                    top: '-1200px',
+                    left: '0',
+                }}
+            />
 		</>
 	);
 }
