@@ -3,21 +3,13 @@ import type { Folder } from "../../../f-shared/api/interfaces";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function createFolder(name: string, parentId: string|null) {
-		const now = Date.now(); const id = uuidv4();
-		const path = parentId ? await pathFromParent(parentId, name) : `/${name}`;
-		const folder: Folder = { id, name, parentId, path, createdAt: now, updatedAt: now };
-		await db.folders.add(folder);
-		return folder;
-}
-
-async function pathFromParent(parentId: string, name: string) {
-	const parent = await db.folders.get(parentId);
-	if (!parent) throw new Error('Parent not found');
-	return `${parent.path}/${name}`.replace(/\/+/g, '/');
+	const id = uuidv4();
+	const folder: Folder = { id, name, parentId };
+	await db.folders.add(folder);
+	return folder;
 }
 
 export async function listChildren(parentId: string | null) {
-	window.console.log(parentId);
 	if (parentId == null) {
 		// корневые папки: индекс по parentId не сработает для null
 		return db.folders.filter(f => f.parentId == null).toArray();
@@ -44,7 +36,6 @@ export async function updateFolder(id: string, patch: Partial<Folder>) {
 	const s = await db.folders.get(id);if (!s) throw new Error('Not found');
 	const next: Folder = {
 		...s, ...patch,
-		updatedAt: Date.now()
 	};
 	await db.folders.put(next); return next;
 }
@@ -81,6 +72,5 @@ export const trashFolder = async (rootId: string) => {
 		await db.folders.bulkDelete(folderIds);
 	});
 };
-
 
 export const moveFolder = (id: string, newParentId: string | null) => updateFolder(id, {parentId: newParentId});

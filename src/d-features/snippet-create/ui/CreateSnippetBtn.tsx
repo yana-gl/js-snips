@@ -1,23 +1,13 @@
 import { Tooltip } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import { RenameModal } from "../../renameModal/renameModal";
-import { useState } from "react";
+import { useCreateModals } from "../../../f-shared/context/createModalsContext";
 
-export const CreateSnippetBtn = ({ parentId }: { parentId: string | null }) => {
-	const [open, setOpen] = useState(false);
+export const CreateSnippetBtn = () => {
+	const { openCreateFolder } = useCreateModals();
+
 	return (
-		<>
-			<Tooltip title="New snippet" placement="top">
-				<AddIcon sx={{ cursor: 'pointer' }} onClick={() => setOpen(true)}/>
-			</Tooltip>
-			{
-				<RenameModal
-					open={open}
-					setOpen={setOpen}
-					type={'SNIPPET'}
-					parentId={parentId}
-				/>
-			}
-		</>
+		<Tooltip title="New snippet (⌘/Ctrl+N)" placement="top">
+			<AddIcon sx={{ cursor: 'pointer' }} onClick={openCreateFolder}/>
+		</Tooltip>
 	);
 };

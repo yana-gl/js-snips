@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EditorModal } from '../editorModal/editorModal';
@@ -9,50 +8,37 @@ import { CardMenu } from '../menu/menu';
 import { Tooltip } from '@mui/material';
 import { useDropArea } from '../../f-shared/hooks/useDragDrop/useDropArea';
 import type { DraggableData } from '../../e-entities/draggableData';
-import { moveSnippet } from '../../e-entities/snippet/model/repo.dexie';
-import { moveFolder } from '../../e-entities/folder/model/repo.dexie';
+import { handleDrop } from '../../f-shared/lib/onDrop';
+import { useDragDropContext } from '../../f-shared/context/dnd';
+import clsx from 'clsx';
 
 type SnippetCardProps = {
 	type: 'SNIPPET';
 	entity: Snippet;
-	onDragStart: any;
 };
 
 type FolderCardProps = {
 	type: 'FOLDER';
 	entity: Folder;
-	onDragStart: any;
 };
 
 type CardProps = SnippetCardProps | FolderCardProps;
 
-export const Card = ({ type,  entity, onDragStart }: CardProps) => {
+export const Card = ({ type,  entity }: CardProps) => {
+	const isSnippet = type === 'SNIPPET';
 	const navigate = useNavigate();
 	const [ open, setOpen ] = useState(false);
-	const iconSrc = type === 'SNIPPET' ? snippetIcon : folderIcon;
-  	const iconAlt = type === 'SNIPPET' ? 'Snippet' : 'Folder';
-	const onDragOver = () => {
-        console.log('on drag over');
-    };
 
-    const onDrop = (e: DragEvent, draggableData?: DraggableData) => {
-		console.log(draggableData);
+	const iconSrc = isSnippet ? snippetIcon : folderIcon;
+  	const iconAlt = isSnippet ? 'snippet icon' : 'folder icon';
+	const { handleDragStart } = useDragDropContext();
 
-		// если пытаемся перетащить в сниппет или в себя или в своего родителя
-        if (type === 'SNIPPET' || draggableData?.id === entity.id || draggableData?.currentParentId === entity.id) {
-            e.preventDefault();
-        } else if (draggableData) {
-			if (draggableData.type === 'SNIPPET') {
-				moveSnippet(draggableData.id, entity.id);
-			} else {
-				moveFolder(draggableData.id, entity.id);
-			}
-        }
-    };
+	const onDrop = (e: DragEvent, data?: DraggableData) => handleDrop(e, entity.id, data);
+    const [dropAreaRef, isDropActive] = useDropArea({
+		onDrop: !isSnippet ? onDrop : undefined,
+	});
 
-    const [ dropAreaRef ] = useDropArea({ onDragOver, onDrop });
-
-	const handleOpen = () => type === 'SNIPPET'
+	const handleOpen = () => isSnippet
 		? setOpen(true)
 		: navigate(`/folder/${entity.id}`);
 
@@ -69,11 +55,17 @@ export const Card = ({ type,  entity, onDragStart }: CardProps) => {
 
 	return <>
 		<div
-			className="flex flex-col items-center gap-2 px-2 py-1 cursor-pointer w-[100px] overflow-hidden"
+			className={clsx(
+				'flex flex-col items-center gap-2 px-2 py-1 cursor-pointer w-[100px] overflow-hidden border-2 rounded-2xl',
+				{
+					'border-[var(--blue-grid-color)] border-dashed bg-[var(--bg-color)]/60': isDropActive && !isSnippet,
+					'border-transparent': !isDropActive || isSnippet,
+				}
+			)}
 			onDoubleClick={handleOpen}
 			onContextMenu={handleContextMenu}
-			ref={dropAreaRef}
-			onDragStart={e => onDragStart(e, { id: entity.id, name: entity.name, type, currentParentId: entity.parentId })}
+			ref={isSnippet ? null : dropAreaRef}
+			onDragStart={e => handleDragStart(e, { id: entity.id, name: entity.name, type, currentParentId: entity.parentId })}
             draggable={true}
 		>
 			<img
@@ -94,7 +86,7 @@ export const Card = ({ type,  entity, onDragStart }: CardProps) => {
 			setContextPos={setContextPos}
 		/>
 		{
-			type === 'SNIPPET' &&
+			isSnippet &&
 			<EditorModal
 				open={open}
 				setOpen={setOpen}

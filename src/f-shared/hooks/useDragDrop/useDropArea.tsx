@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { DraggableData } from '../../../e-entities/draggableData';
 
 interface DropAreaProps {
@@ -8,11 +8,17 @@ interface DropAreaProps {
 }
 
 export const useDropArea = ({ onDragOver, onDrop, onDragLeave }: DropAreaProps) => {
+    const [isDropActive, setIsDropActive] = useState(false);
     const dropAreaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // делаем копию, так как к моменту размонтирования dropAreaRef.current может уже указывать на другой элемент или быть null (а нам нужно отписаться от событий)
+        const copyRefValue = dropAreaRef.current;
+        if (!copyRefValue) return;
+
         const handleDragOver = (e: DragEvent) => {
             e.preventDefault();
+            setIsDropActive(true);
             onDragOver?.(e);
         };
 
@@ -21,33 +27,28 @@ export const useDropArea = ({ onDragOver, onDrop, onDragLeave }: DropAreaProps) 
             return data && JSON.parse(data);
         };
 
-        const handleDrop = (e: DragEvent): void => {
+        const handleDrop = (e: DragEvent) => {
             e.preventDefault();
+            setIsDropActive(false);
             const draggableData = getDraggableData(e);
             onDrop?.(e, draggableData);
         };
 
-        const handleDragLeave = (e: DragEvent): void => {
+        const handleDragLeave = (e: DragEvent) => {
+            setIsDropActive(false);
             onDragLeave?.(e);
         };
 
-        let copyRefValue: HTMLDivElement | null = null;
-
-        if (dropAreaRef && dropAreaRef.current) {
-            dropAreaRef.current.addEventListener('dragover', handleDragOver);
-            dropAreaRef.current.addEventListener('drop', handleDrop);
-            dropAreaRef.current.addEventListener('dragleave', handleDragLeave);
-            copyRefValue = dropAreaRef.current;
-        }
+        copyRefValue.addEventListener('dragover', handleDragOver);
+        copyRefValue.addEventListener('drop', handleDrop);
+        copyRefValue.addEventListener('dragleave', handleDragLeave);
 
         return () => {
-            if (copyRefValue) {
-                copyRefValue.removeEventListener('dragover', handleDragOver);
-                copyRefValue.removeEventListener('drop', handleDrop);
-                copyRefValue.removeEventListener('dragleave', handleDragLeave);
-            }
+            copyRefValue.removeEventListener('dragover', handleDragOver);
+            copyRefValue.removeEventListener('drop', handleDrop);
+            copyRefValue.removeEventListener('dragleave', handleDragLeave);
         };
-    }, [ dropAreaRef, onDragLeave, onDragOver, onDrop ]);
+    }, [onDragLeave, onDragOver, onDrop]);
 
-    return [ dropAreaRef ];
+    return [dropAreaRef, isDropActive] as const;
 };

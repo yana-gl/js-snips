@@ -1,43 +1,39 @@
-
 import { renderToString } from 'react-dom/server';
 import type { DraggableData } from '../../../e-entities/draggableData';
-import { useRef, type RefObject } from 'react';
+import { useRef, type RefObject, type DragEvent as ReactDragEvent } from 'react';
 import { DragElementContent } from '../../components/dragElementContent/dragElementContent';
+import type { HandleDragStartType } from '../../types/handleDragStartType';
 
 type UseDraggableData = {
-    dragElementRef: RefObject<HTMLDivElement | null>;
-    handleDragStart: (e: React.DragEvent, draggableData: DraggableData) => void;
+	// вешаем на кастомный dragImage
+	dragElementRef: RefObject<HTMLDivElement | null>;
+	// вешаем на onDragStart у перетаскиваемого элемента
+	handleDragStart: HandleDragStartType;
 };
 
 export function useDraggable(): UseDraggableData {
-    // требования к dragImage (изображение при перетаскивании), если это HTMLElement: existing, visible
-    const dragElementRef = useRef<HTMLDivElement>(null);
+	const dragElementRef = useRef<HTMLDivElement>(null);
 
-    // Добавление передаваемых при перетаскивании данных
-    const setDraggableData = (e: React.DragEvent, draggableData: DraggableData) => {
-        const dataString = JSON.stringify(draggableData);
-        e.dataTransfer?.setData('text/plain', dataString);
-    };
+	const handleDragStart = (e: ReactDragEvent, draggableData: DraggableData) => {
+		const { dataTransfer } = e;
+		if (!dataTransfer) return;
 
-    // Показать изображение при перетаскивании
-    const showDragElement = (e: React.DragEvent, draggableData: DraggableData) => {
-        const html = renderToString(
-            <DragElementContent
-                name={draggableData.name}
-            />,
-        );
-        if (dragElementRef.current && e.dataTransfer) {
-            dragElementRef.current.innerHTML = html;
-            e.dataTransfer.setDragImage(dragElementRef.current, 0, 0);
-        }
-    };
+		// убираем "зелёный плюс" (копирование), говорим браузеру что это move
+		dataTransfer.effectAllowed = 'move';
 
-    const handleDragStart = (e: React.DragEvent, draggableData: DraggableData) => {
-        // removes green plus on drag over in os
-        e.dataTransfer.effectAllowed = 'move';
-        showDragElement(e, draggableData);
-        setDraggableData(e, draggableData);
-    };
+		// показать изображение при перетаскивании
+		const html = renderToString(
+			<DragElementContent name={draggableData.name} type={draggableData.type}/>,
+		);
 
-    return { dragElementRef, handleDragStart };
+		if (dragElementRef.current) {
+			dragElementRef.current.innerHTML = html;
+			// привязываем кастомный dragImage к курсору
+			dataTransfer.setDragImage(dragElementRef.current, 0, 0);
+		}
+		// кладём полезные данные о том, что тащим
+		dataTransfer.setData('text/plain', JSON.stringify(draggableData));
+	};
+
+	return { dragElementRef, handleDragStart };
 }

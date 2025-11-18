@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
 import { RenameModal } from '../renameModal/renameModal';
 import { trashSnippet } from '../../e-entities/snippet/model/repo.dexie';
@@ -16,7 +15,6 @@ type FolderCardProps = {
 };
 
 export const CardMenu = ({ type,  entity, contextPos, handleOpen, setContextPos }: FolderCardProps) => {
-	const { folderId } = useParams();
 	const [ openRename, setOpenRename ] = useState(false);
 
 	const handleRename = () => {
@@ -58,7 +56,6 @@ export const CardMenu = ({ type,  entity, contextPos, handleOpen, setContextPos 
 				open={openRename}
 				setOpen={setOpenRename}
 				type={type}
-				parentId={folderId || null}
 				entity={entity}
 			/>
 		}

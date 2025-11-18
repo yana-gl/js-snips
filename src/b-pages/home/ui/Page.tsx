@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { SnippetList } from "../../../c-widgets/snippetList/snippetList";
 import { useEffect, useState } from "react";
 import { getFolderBreadcrumbs } from "../../../e-entities/folder/model/repo.dexie";
@@ -7,13 +7,12 @@ import { BreadCrumbs } from "../../../d-features/breadCrumbs/breadCrumbs";
 import { useFolderContent } from "../../../f-shared/lib/useSnippet";
 import { FolderList } from "../../../c-widgets/folderList/folderList";
 import Logo from '../../../f-shared/source/logo.svg?react';
-import { useDraggable } from "../../../f-shared/hooks/useDragDrop/useDraggable";
+import { CreateProvider } from "../../../f-shared/context/createModalsContext";
 
 export const HomePage = () => {
 	const { folderId } = useParams();
 	const {snippets, folders} = useFolderContent(folderId || null);
 	const [ crumbs, setCrumbs ] = useState<Folder[]>([]);
-	const { dragElementRef, handleDragStart } = useDraggable();
 
 	useEffect(() => {
 		if (folderId) {
@@ -25,25 +24,16 @@ export const HomePage = () => {
 	}, [folderId]);
 
 	return (
-		<>
-			<header className="bg-[#F7F5ED] p-[10px] border-b-[#BFD3D2] border-b-[2px] flex align-center justify-center">
+		<CreateProvider>
+			<header className="bg-[var(--bg-color)] p-[10px] border-b-[var(--blue-grid-color)] border-b-[2px] flex align-center justify-center">
 				{/* todo: видео-инструкция */}
 				<Logo className="h-[50px] cursor-pointer"/>
 			</header>
-			<div className="bg-grid-notebook h-screen flex flex-col p-[30px] gap-[30px] bg-[#F5F5F5]">
+			<div className="flex flex-col gap-[30px] h-screen p-[30px] bg-grid-notebook">
 				<BreadCrumbs items={crumbs}/>
-				<FolderList folders={folders} folderId={folderId || null} onDragStart={handleDragStart}/>
-				<SnippetList snippets={snippets} folderId={folderId || null} onDragStart={handleDragStart}/>
+				<FolderList folders={folders}/>
+				<SnippetList snippets={snippets}/>
 			</div>
-			<div
-                ref={dragElementRef}
-				className="shadow-lg bg-white z-1 p-[10px] border-[1px] border-[#BFD3D2] rounded-[5px]"
-                style={{
-                    position: 'absolute',
-                    top: '-1200px',
-                    left: '0',
-                }}
-            />
-		</>
+		</CreateProvider>
 	);
 }
