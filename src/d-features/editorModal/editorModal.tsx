@@ -52,7 +52,7 @@ export const EditorModal = ({ open, setOpen, snippet: {name, id, code: value = '
 				<Editor
 					path={id} 
 					defaultLanguage="javascript"
-					height="100%"                // у родителя есть высота → редактор займет всё
+					height="100%" // у родителя есть высота → редактор займет всё
 					options={{
 						minimap: { enabled: false },
 						wordWrap: 'on',
@@ -65,5 +65,5 @@ export const EditorModal = ({ open, setOpen, snippet: {name, id, code: value = '
 				/>
 			</div>
 		</BaseModal>
-	  )
-}
+	  );
+};

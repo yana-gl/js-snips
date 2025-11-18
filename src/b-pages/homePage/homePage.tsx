@@ -1,13 +1,13 @@
-import { useParams } from "react-router-dom";
-import { SnippetList } from "../../c-widgets/snippetList/snippetList";
-import { useEffect, useState } from "react";
-import { getFolderBreadcrumbs } from "../../e-entities/folder/folderStorage";
-import type { Folder } from "../../f-shared/api/interfaces";
-import { BreadCrumbs } from "../../c-widgets/breadCrumbs/breadCrumbs";
-import { useFolderContent } from "../../f-shared/hooks/useFolderContent";
-import { FolderList } from "../../c-widgets/folderList/folderList";
+import { useParams } from 'react-router-dom';
+import { SnippetList } from '../../c-widgets/snippetList/snippetList';
+import { useEffect, useState } from 'react';
+import { getFolderBreadcrumbs } from '../../e-entities/folder/folderStorage';
+import type { Folder } from '../../f-shared/api/interfaces';
+import { BreadCrumbs } from '../../c-widgets/breadCrumbs/breadCrumbs';
+import { useFolderContent } from '../../f-shared/hooks/useFolderContent';
+import { FolderList } from '../../c-widgets/folderList/folderList';
 import Logo from '../../f-shared/assets/logo.svg?react';
-import { CreateProvider } from "../../f-shared/context/createModalsContext";
+import { CreateProvider } from '../../f-shared/context/createModalsContext';
 
 export const HomePage = () => {
 	const { folderId } = useParams();
@@ -35,4 +35,4 @@ export const HomePage = () => {
 			</div>
 		</CreateProvider>
 	);
-}
+};

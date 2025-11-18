@@ -1,5 +1,5 @@
-import { db } from "../../f-shared/api/db";
-import type { Folder } from "../../f-shared/api/interfaces";
+import { db } from '../../f-shared/api/db';
+import type { Folder } from '../../f-shared/api/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function createFolder(name: string, parentId: string|null) {

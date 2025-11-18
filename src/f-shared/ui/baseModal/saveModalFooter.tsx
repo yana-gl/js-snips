@@ -14,5 +14,5 @@ export const SaveModalFooter = ({ saving, disabled = saving, onSave }: EditorMod
 				{saving ? 'Saving…' : 'Save'}
 			</Button>
 		</div>
-	  )
-}
+	  );
+};

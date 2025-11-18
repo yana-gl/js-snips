@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 type UseHotkeyProps = {
-	enabled: boolean;          // включён ли хоткей
-	key: string;               // буква: 's', 'n', 'f'
-	handler: () => void;       // что вызываем
+	enabled: boolean; // включён ли хоткей
+	key: string; // буква: 's', 'n', 'f'
+	handler: () => void; // что вызываем
 };
 
 export const useHotkey = ({ enabled, key, handler }: UseHotkeyProps) => {

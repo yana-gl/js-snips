@@ -1,6 +1,6 @@
-import { CreateSnippetButton } from "../../d-features/createSnippetButton/createSnippetButton";
-import type { Snippet } from "../../f-shared/api/interfaces";
-import { Card } from "../card/card";
+import { CreateSnippetButton } from '../../d-features/createSnippetButton/createSnippetButton';
+import type { Snippet } from '../../f-shared/api/interfaces';
+import { Card } from '../card/card';
 
 interface SnippetListProps {
 	snippets: Snippet[];

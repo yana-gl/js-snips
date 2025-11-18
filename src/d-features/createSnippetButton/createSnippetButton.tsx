@@ -1,13 +1,13 @@
-import { Tooltip } from "@mui/material";
+import { Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useCreateModals } from "../../f-shared/context/createModalsContext";
+import { useCreateModals } from '../../f-shared/context/createModalsContext';
 
 export const CreateSnippetButton = () => {
-	const { openCreateFolder } = useCreateModals();
+	const { openCreateSnippet} = useCreateModals();
 
 	return (
 		<Tooltip title="New snippet (⌘/Ctrl+N)" placement="top">
-			<AddIcon sx={{ cursor: 'pointer' }} onClick={openCreateFolder}/>
+			<AddIcon sx={{ cursor: 'pointer' }} onClick={openCreateSnippet}/>
 		</Tooltip>
 	);
 };

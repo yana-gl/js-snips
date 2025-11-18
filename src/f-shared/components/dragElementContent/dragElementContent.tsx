@@ -25,4 +25,4 @@ export const DragElementContent = ({ name, type }: DragElementContentProps) => {
             </div>
         </div>
     );
-}
+};

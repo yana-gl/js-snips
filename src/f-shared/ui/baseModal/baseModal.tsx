@@ -39,5 +39,5 @@ export const BaseModal = ({ open, setOpen, modalTitle, children, footer, onClose
 				</div>
 			</div>
 		</Modal>
-	  )
-}
+	  );
+};

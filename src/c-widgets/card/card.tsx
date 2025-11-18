@@ -11,6 +11,7 @@ import { useDragDropContext } from '../../f-shared/context/dragDropContext';
 import clsx from 'clsx';
 import type { DraggableData } from '../../f-shared/types/draggableData';
 import { useDropArea } from '../../f-shared/hooks/useDropArea';
+import type { ContextMenuPosition } from '../../f-shared/types/contextMenuPosition';
 
 type SnippetCardProps = {
 	type: 'SNIPPET';
@@ -24,7 +25,7 @@ type FolderCardProps = {
 
 type CardProps = SnippetCardProps | FolderCardProps;
 
-export const Card = ({ type,  entity }: CardProps) => {
+export const Card = ({ type, entity }: CardProps) => {
 	const isSnippet = type === 'SNIPPET';
 	const navigate = useNavigate();
 	const [ open, setOpen ] = useState(false);
@@ -42,12 +43,12 @@ export const Card = ({ type,  entity }: CardProps) => {
 		? setOpen(true)
 		: navigate(`/folder/${entity.id}`);
 
-	const [contextPos, setContextPos] = useState<{ mouseX: number; mouseY: number } | null>(null);
+	const [contextMenuPosition, setContextMenuPosition] = useState<ContextMenuPosition | null>(null);
 
 	const handleContextMenu = (event: MouseEvent<HTMLDivElement>) => {
 		event.preventDefault();
-		setContextPos(
-			contextPos === null
+		setContextMenuPosition(
+			contextMenuPosition === null
 			? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 }
 			: null
 		);
@@ -81,9 +82,9 @@ export const Card = ({ type,  entity }: CardProps) => {
 		<CardMenu
 			type={type}
 			entity={entity}
-			contextPos={contextPos}	
+			contextMenuPosition={contextMenuPosition}	
 			handleOpen={handleOpen}
-			setContextPos={setContextPos}
+			setContextMenuPosition={setContextMenuPosition}
 		/>
 		{
 			isSnippet &&
@@ -93,5 +94,5 @@ export const Card = ({ type,  entity }: CardProps) => {
 				snippet={entity}
 			/>
 		}
-	</>
-}
+	</>;
+};

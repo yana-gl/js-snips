@@ -71,5 +71,5 @@ export const RenameModal = ({ type, open, setOpen, entity }: RenameModalProps) =
 		>
 			<Input autoFocus={true} className="px-3 py-2" value={name} onChange={e => setName(e.target.value)}/>
 		</BaseModal>
-	  )
-}
+	  );
+};

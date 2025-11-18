@@ -19,5 +19,21 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      quotes: ['error', 'single', { avoidEscape: true }],
+      'quote-props': ['error', 'as-needed'],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-multi-spaces': 'error',
+      semi: ['error', 'always'],
+    },
   },
 ])

@@ -1,5 +1,5 @@
-import type { BreadCrumbType } from "../../f-shared/types/breadCrumb";
-import { BreadCrumb } from "./breadCrumb";
+import type { BreadCrumbType } from '../../f-shared/types/breadCrumb';
+import { BreadCrumb } from './breadCrumb';
 
 interface DocumentCreateProps {
     items: BreadCrumbType[];

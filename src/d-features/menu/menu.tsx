@@ -1,20 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
 import { RenameModal } from '../renameModal/renameModal';
 import { trashSnippet } from '../../e-entities/snippet/snippetStorage';
 import { trashFolder } from '../../e-entities/folder/folderStorage';
+import type { ContextMenuPosition } from '../../f-shared/types/contextMenuPosition';
 
-type FolderCardProps = {
+type CardMenuProps = {
 	type: 'SNIPPET' | 'FOLDER';
 	entity: Folder | Snippet;
-	contextPos: any;
+	contextMenuPosition: ContextMenuPosition | null;
 	handleOpen: () => void;
-	setContextPos: (ctx: any) => void;
+	setContextMenuPosition: (ctx: ContextMenuPosition | null) => void;
 };
 
-export const CardMenu = ({ type,  entity, contextPos, handleOpen, setContextPos }: FolderCardProps) => {
+export const CardMenu = ({ type, entity, contextMenuPosition, handleOpen, setContextMenuPosition }: CardMenuProps) => {
 	const [ openRename, setOpenRename ] = useState(false);
 
 	const handleRename = () => {
@@ -33,17 +33,17 @@ export const CardMenu = ({ type,  entity, contextPos, handleOpen, setContextPos 
 
 
 	const handleContextClose = () => {
-		setContextPos(null);
+		setContextMenuPosition(null);
 	};
 
 	return <>
 		<Menu
-			open={contextPos !== null}
+			open={contextMenuPosition !== null}
   			onClose={handleContextClose}
 			anchorReference="anchorPosition"
 			anchorPosition={
-				contextPos !== null
-				? { top: contextPos.mouseY, left: contextPos.mouseX }
+				contextMenuPosition !== null
+				? { top: contextMenuPosition.mouseY, left: contextMenuPosition.mouseX }
 				: undefined
 			}
 		>
@@ -59,5 +59,5 @@ export const CardMenu = ({ type,  entity, contextPos, handleOpen, setContextPos 
 				entity={entity}
 			/>
 		}
-	</>
-}
+	</>;
+};
