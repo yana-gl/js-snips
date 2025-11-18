@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import type { DraggableData } from "../../e-entities/draggableData";
-import { handleDrop } from "../../f-shared/lib/onDrop";
-import { useDropArea } from "../../f-shared/hooks/useDragDrop/useDropArea";
+import type { DraggableData } from "../../f-shared/types/draggableData";
+import { handleDrop } from "../../f-shared/utils/onDrop";
 import type { BreadCrumbType } from "../../f-shared/types/breadCrumb";
 import clsx from "clsx";
+import { useDropArea } from "../../f-shared/hooks/useDropArea";
 
 interface DocumentCreateProps {
     item?: BreadCrumbType;

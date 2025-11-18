@@ -1,8 +1,8 @@
 import { renderToString } from 'react-dom/server';
-import type { DraggableData } from '../../../e-entities/draggableData';
 import { useRef, type RefObject, type DragEvent as ReactDragEvent } from 'react';
-import { DragElementContent } from '../../components/dragElementContent/dragElementContent';
-import type { HandleDragStartType } from '../../types/handleDragStartType';
+import type { HandleDragStartType } from '../types/handleDragStartType';
+import type { DraggableData } from '../types/draggableData';
+import { DragElementContent } from '../components/dragElementContent/dragElementContent';
 
 type UseDraggableData = {
 	// вешаем на кастомный dragImage

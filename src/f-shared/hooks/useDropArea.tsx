@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { DraggableData } from '../../../e-entities/draggableData';
+import type { DraggableData } from '../types/draggableData';
 
 interface DropAreaProps {
     onDragOver?: (e: DragEvent) => void;

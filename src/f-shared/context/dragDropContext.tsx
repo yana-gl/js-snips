@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, type ReactNode, type RefObject } from 'react';
 import type { HandleDragStartType } from '../types/handleDragStartType';
-import { useDraggable } from '../hooks/useDragDrop/useDraggable';
+import { useDraggable } from '../hooks/useDraggable';
 
 type DragDropContextValue = {
 	dragElementRef: RefObject<HTMLDivElement | null>;

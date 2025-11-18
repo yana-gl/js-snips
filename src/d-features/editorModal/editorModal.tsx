@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
-import { updateSnippet } from '../../e-entities/snippet/model/repo.dexie';
+import { updateSnippet } from '../../e-entities/snippet/snippetStorage';
 import type { Snippet } from '../../f-shared/api/interfaces';
-import { AppModal } from '../modal/modal';
-import { SaveModalFooter } from '../modal/modalFooter';
+import { BaseModal } from '../../f-shared/ui/baseModal/baseModal';
+import { SaveModalFooter } from '../../f-shared/ui/baseModal/saveModalFooter';
 import { useSaveHotkey } from '../../f-shared/hooks/useHotKeys';
 
 interface EditorModalProps {
@@ -39,7 +39,7 @@ export const EditorModal = ({ open, setOpen, snippet: {name, id, code: value = '
 	};
 
 	return (
-		<AppModal
+		<BaseModal
 			open={open}
 			setOpen={setOpen}
 			modalTitle={name}
@@ -64,6 +64,6 @@ export const EditorModal = ({ open, setOpen, snippet: {name, id, code: value = '
 					onChange={(v) => setCode(v ?? '')}
 				/>
 			</div>
-		</AppModal>
+		</BaseModal>
 	  )
 }

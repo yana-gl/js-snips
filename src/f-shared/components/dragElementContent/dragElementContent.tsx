@@ -1,5 +1,5 @@
-import snippetIcon from '../../../f-shared/source/file.png';
-import folderIcon from '../../../f-shared/source/folder.png';
+import snippetIcon from '../../../f-shared/assets/file.png';
+import folderIcon from '../../../f-shared/assets/folder.png';
 
 interface DragElementContentProps {
     name: string;

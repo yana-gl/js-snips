@@ -1,6 +1,6 @@
-import type { DraggableData } from "../../e-entities/draggableData";
-import { moveFolder } from "../../e-entities/folder/model/repo.dexie";
-import { moveSnippet } from "../../e-entities/snippet/model/repo.dexie";
+import type { DraggableData } from "../types/draggableData";
+import { moveFolder } from "../../e-entities/folder/folderStorage";
+import { moveSnippet } from "../../e-entities/snippet/snippetStorage";
 
 export const handleDrop = (e: DragEvent, targetFolderId: string | null, draggable?: DraggableData) => {
     e.preventDefault();

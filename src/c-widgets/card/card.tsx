@@ -1,16 +1,16 @@
 import { useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EditorModal } from '../editorModal/editorModal';
+import { EditorModal } from '../../d-features/editorModal/editorModal';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
-import snippetIcon from '../../f-shared/source/file.png';
-import folderIcon from '../../f-shared/source/folder.png';
-import { CardMenu } from '../menu/menu';
+import snippetIcon from '../../f-shared/assets/file.png';
+import folderIcon from '../../f-shared/assets/folder.png';
+import { CardMenu } from '../../d-features/menu/menu';
 import { Tooltip } from '@mui/material';
-import { useDropArea } from '../../f-shared/hooks/useDragDrop/useDropArea';
-import type { DraggableData } from '../../e-entities/draggableData';
-import { handleDrop } from '../../f-shared/lib/onDrop';
-import { useDragDropContext } from '../../f-shared/context/dnd';
+import { handleDrop } from '../../f-shared/utils/onDrop';
+import { useDragDropContext } from '../../f-shared/context/dragDropContext';
 import clsx from 'clsx';
+import type { DraggableData } from '../../f-shared/types/draggableData';
+import { useDropArea } from '../../f-shared/hooks/useDropArea';
 
 type SnippetCardProps = {
 	type: 'SNIPPET';

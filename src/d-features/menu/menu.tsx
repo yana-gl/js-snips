@@ -3,8 +3,8 @@ import { Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
 import { RenameModal } from '../renameModal/renameModal';
-import { trashSnippet } from '../../e-entities/snippet/model/repo.dexie';
-import { trashFolder } from '../../e-entities/folder/model/repo.dexie';
+import { trashSnippet } from '../../e-entities/snippet/snippetStorage';
+import { trashFolder } from '../../e-entities/folder/folderStorage';
 
 type FolderCardProps = {
 	type: 'SNIPPET' | 'FOLDER';

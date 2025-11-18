@@ -1,5 +1,5 @@
-import { db } from "../../../f-shared/api/db";
-import type { Snippet } from "../../../f-shared/api/interfaces";
+import { db } from "../../f-shared/api/db";
+import type { Snippet } from "../../f-shared/api/interfaces";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function createSnippet(p: Partial<Snippet> & { parentId: string | null }) {
@@ -28,7 +28,6 @@ export const trashSnippet = (id: string) => db.snippets.delete(id);
 export const moveSnippet = (id: string, newParentId: string | null) => updateSnippet(id, {parentId: newParentId});
 
 export const listSnippetsByFolder = (folderId: string | null) => {
-	window.console.log(folderId);
 	if (folderId == null) {
 		return db.snippets.filter(f => f.parentId == null).toArray();
 	}

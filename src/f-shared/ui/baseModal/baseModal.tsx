@@ -3,7 +3,7 @@ import { Modal, Typography, IconButton } from '@mui/material';
 import clsx from 'clsx';
 import { type ReactNode } from 'react';
 
-interface AppModalProps {
+interface BaseModalProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	onClose: () => void;
@@ -13,7 +13,7 @@ interface AppModalProps {
 	contentClassName?: string;
 }
 
-export const AppModal = ({ open, setOpen, modalTitle, children, footer, onClose, contentClassName }: AppModalProps) => {
+export const BaseModal = ({ open, setOpen, modalTitle, children, footer, onClose, contentClassName }: BaseModalProps) => {
 	const baseContentClass ='w-full max-w-[60vw] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col';
 
 	return (

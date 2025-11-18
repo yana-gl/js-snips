@@ -1,11 +1,11 @@
 import { Input } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { createSnippet, updateSnippet } from '../../e-entities/snippet/model/repo.dexie';
+import { createSnippet, updateSnippet } from '../../e-entities/snippet/snippetStorage';
 import type { Folder, Snippet } from '../../f-shared/api/interfaces';
-import { createFolder, updateFolder } from '../../e-entities/folder/model/repo.dexie';
+import { createFolder, updateFolder } from '../../e-entities/folder/folderStorage';
 import { useParams } from 'react-router-dom';
-import { AppModal } from '../modal/modal';
-import { SaveModalFooter } from '../modal/modalFooter';
+import { BaseModal } from '../../f-shared/ui/baseModal/baseModal';
+import { SaveModalFooter } from '../../f-shared/ui/baseModal/saveModalFooter';
 import { useSaveHotkey } from '../../f-shared/hooks/useHotKeys';
 
 interface RenameModalProps {
@@ -56,7 +56,7 @@ export const RenameModal = ({ type, open, setOpen, entity }: RenameModalProps) =
 	};
 
 	return (
-		<AppModal
+		<BaseModal
 			open={open}
 			setOpen={setOpen}
 			modalTitle={'Enter name'}
@@ -70,6 +70,6 @@ export const RenameModal = ({ type, open, setOpen, entity }: RenameModalProps) =
 			}
 		>
 			<Input autoFocus={true} className="px-3 py-2" value={name} onChange={e => setName(e.target.value)}/>
-		</AppModal>
+		</BaseModal>
 	  )
 }
