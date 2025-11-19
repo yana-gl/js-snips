@@ -25,13 +25,27 @@ export const HomePage = () => {
 
 	return (
 		<CreateProvider>
-			<header className="bg-[var(--bg-color)] p-[10px] border-b-[var(--blue-grid-color)] border-b-[2px] flex align-center justify-center">
-				<Logo className="h-[50px] cursor-pointer"/>
-			</header>
-			<div className="flex flex-col gap-[30px] h-screen p-[30px] bg-grid-notebook">
-				<BreadCrumbs items={crumbs}/>
-				<FolderList folders={folders}/>
-				<SnippetList snippets={snippets}/>
+			<div className='flex flex-col bg-[var(--bg-color)] min-h-screen'>
+				<header className="bg-[var(--bg-color)] p-[10px] border-b-[var(--blue-grid-color)] border-b-[2px] flex align-center justify-center">
+					<Logo className="h-[50px] cursor-pointer"/>
+				</header>
+				<main className='flex-1 flex flex-col gap-[30px] p-[30px] bg-grid-notebook'>
+					<BreadCrumbs items={crumbs}/>
+					<FolderList folders={folders}/>
+					<SnippetList snippets={snippets}/>
+				</main>
+				<footer className='w-full px-3 py-2 text-center text-xs text-neutral-500'>
+					Icons by
+					&nbsp;
+					<a
+						href='https://icons8.com'
+						target='_blank'
+						rel='noreferrer'
+						className='underline'
+					>
+						icons8.com
+					</a>
+				</footer>
 			</div>
 		</CreateProvider>
 	);

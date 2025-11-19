@@ -51,7 +51,7 @@ export const EditorModal = ({ open, setOpen, snippet: {name, id, code: value = '
 			<div className="flex-1 min-h-0">
 				<Editor
 					path={id} 
-					defaultLanguage="javascript"
+					defaultLanguage="typescript"
 					height="100%" // у родителя есть высота → редактор займет всё
 					options={{
 						minimap: { enabled: false },

@@ -7,7 +7,6 @@ export async function createSnippet(p: Partial<Snippet> & { parentId: string | n
 		id: uuidv4(),
 		name: p.name ?? 'Untitled',
 		parentId: p.parentId || null,
-		language: p.language ?? 'plaintext',
 		code: p.code ?? '',
 	};
 	await db.snippets.add(s);

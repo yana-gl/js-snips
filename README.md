@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# snips
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Менеджер сниппетов кода в **браузере**. Можно создавать папки и сниппеты, перетаскивать их мышкой, открывать и редактировать.
 
-Currently, two official plugins are available:
+## Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+👉 [Открыть js-snips](https://js-snips.vercel.app)  
 
-## React Compiler
+## Основные возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Drag & drop для перемещения папок и сниппетов
+- Контекстное меню по правому клику по карточке
+- Горячие клавиши для создания папки и сниппета
+- Редактирование кода сниппета на TypeScript через Monaco Editor
+- Хранение данных в браузере через IndexedDB (Dexie)
 
-## Expanding the ESLint configuration
+## Стек
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React + TypeScript**
+- **Vite**
+- **FSD-структура** слоёв:
+  - `a-app` – точка входа, провайдеры
+  - `b-pages` – страницы
+  - `c-widgets` – составные блоки (списки, карточки)
+  - `d-features` – действия пользователя (создание, редактирование, меню)
+  - `e-entities` – управление хранилищем папок и сниппетов
+  - `f-shared` – общие компоненты, контексты, хуки, типы
+- **Dexie** для работы с IndexedDB
+- **Monaco** для редактора кода
+- **MUI** – для UI компонентов
+- **Tailwind CSS** – для стилей
+- **ESLint + TypeScript ESLint** для единого стиля кода
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Зачем этот проект
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+На этом проекте я отрабатываю:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- использование Tailwind,
+- работу с IndexedDB через Dexie,
+- drag & drop в React,
+- настройку линтинга и стиля кода.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Планы
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Мобильная версия
+- Поиск по сниппетам и тегам
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Локальный запуск
+
+```bash
+npm install
+npm run dev

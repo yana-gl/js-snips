@@ -32,7 +32,7 @@ export const RenameModal = ({ type, open, setOpen, entity }: RenameModalProps) =
 			setSaving(true);
 			if (type === 'SNIPPET') {
 				if (!entity) {
-					await createSnippet({ name, parentId, language: 'ts' });
+					await createSnippet({ name, parentId });
 				} else {
 					await updateSnippet(entity.id, {name});
 				}
