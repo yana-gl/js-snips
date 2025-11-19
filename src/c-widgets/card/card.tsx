@@ -83,7 +83,7 @@ export const Card = ({ type, entity }: CardProps) => {
 			type={type}
 			entity={entity}
 			contextMenuPosition={contextMenuPosition}	
-			handleOpen={handleOpen}
+			handleOpenEditor={handleOpen}
 			setContextMenuPosition={setContextMenuPosition}
 		/>
 		{

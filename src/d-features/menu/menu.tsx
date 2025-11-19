@@ -10,12 +10,17 @@ type CardMenuProps = {
 	type: 'SNIPPET' | 'FOLDER';
 	entity: Folder | Snippet;
 	contextMenuPosition: ContextMenuPosition | null;
-	handleOpen: () => void;
+	handleOpenEditor: () => void;
 	setContextMenuPosition: (ctx: ContextMenuPosition | null) => void;
 };
 
-export const CardMenu = ({ type, entity, contextMenuPosition, handleOpen, setContextMenuPosition }: CardMenuProps) => {
+export const CardMenu = ({ type, entity, contextMenuPosition, handleOpenEditor, setContextMenuPosition }: CardMenuProps) => {
 	const [ openRename, setOpenRename ] = useState(false);
+
+	const handleOpen = () => {
+		handleOpenEditor();
+		handleContextClose();
+	};
 
 	const handleRename = () => {
 		setOpenRename(true);
@@ -47,9 +52,9 @@ export const CardMenu = ({ type, entity, contextMenuPosition, handleOpen, setCon
 				: undefined
 			}
 		>
-			<MenuItem onClick={handleOpen}>Открыть</MenuItem>
-			<MenuItem onClick={handleRename}>Переименовать</MenuItem>
-			<MenuItem onClick={handleDelete}>Удалить</MenuItem>
+			<MenuItem onClick={handleOpen}>Open</MenuItem>
+			<MenuItem onClick={handleRename}>Rename</MenuItem>
+			<MenuItem onClick={handleDelete}>Delete</MenuItem>
 		</Menu>
 		{	openRename &&
 			<RenameModal
